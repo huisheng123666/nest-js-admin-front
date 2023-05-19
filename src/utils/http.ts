@@ -1,11 +1,11 @@
 import axios from "axios";
 
-const instance = axios.create({
+const http = axios.create({
   baseURL: "/api/v1",
   timeout: 60000,
 });
 
-instance.interceptors.request.use(
+http.interceptors.request.use(
   function (config) {
     // 在发送请求之前做些什么
     return config;
@@ -17,7 +17,7 @@ instance.interceptors.request.use(
 );
 
 // 添加响应拦截器
-instance.interceptors.response.use(
+http.interceptors.response.use(
   function (response) {
     if (response.status === 200) {
       return response.data;
@@ -33,4 +33,4 @@ instance.interceptors.response.use(
   }
 );
 
-export default instance;
+export default http;
