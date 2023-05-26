@@ -40,7 +40,7 @@
     </el-table>
 
     <el-dialog
-      :title="dialogType === 1 ? '编辑用户' : '新增用户'"
+      :title="dialogType !== 1 ? '编辑用户' : '新增用户'"
       v-model="showDialog"
       width="600"
       @close="toggleDialog(false)"
@@ -114,6 +114,7 @@ interface RoleItem {
 }
 
 interface UserItem {
+  id?: number;
   username: string;
   profile: Profile;
   roles: RoleItem[];
@@ -166,7 +167,9 @@ function removeRow(row: UserItem) {
     cancelButtonText: "取消",
     confirmButtonText: "确认",
   }).then(() => {
-    console.log(row);
+    http.delete("/user/" + row.id).then(() => {
+      getList();
+    });
   });
 }
 
