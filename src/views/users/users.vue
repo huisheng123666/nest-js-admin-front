@@ -13,7 +13,11 @@
           {{ scope.row.roles?.map((role: RoleItem) => role.name).join(",") }}
         </template>
       </el-table-column>
-      <el-table-column label="性别" prop="profile.gender" min-width="80" />
+      <el-table-column label="性别" prop="profile.gender" min-width="80">
+        <template #default="scope">
+          {{ scope.row.profile.gender === 1 ? "男" : "女" }}
+        </template>
+      </el-table-column>
       <el-table-column
         label="头像"
         prop="profile.photo"
@@ -202,17 +206,17 @@ function addSubmit() {
   addFormRef.value?.validate().then((valid) => {
     if (valid) {
       addLoading.value = true;
-      http
-        .post("/user", {
+      http[dialogType.value === 1 ? "post" : "patch"](
+        "/user" + (dialogType.value === 2 ? `/${editRow.value?.id}` : ""),
+        {
           ...addFormState,
           password: "123456",
-        })
-        .then((res) => {
-          addLoading.value = false;
-          console.log(res);
-          toggleDialog(false);
-          getList();
-        });
+        }
+      ).then(() => {
+        addLoading.value = false;
+        toggleDialog(false);
+        getList();
+      });
     }
   });
 }
